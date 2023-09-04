@@ -1,0 +1,27 @@
+FROM python:3.11-alpine
+
+ARG APP_HOME=/app
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN mkdir ${APP_HOME}
+COPY . ${APP_HOME}
+
+WORKDIR ${APP_HOME}
+
+RUN apk add --no-cache --upgrade bash jq curl
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN sed -i 's/\r$//g' ./script/entry_dj
+RUN chmod +x ./script/entry_dj
+
+RUN sed -i 's/\r$//g' ./script/start_dj
+RUN chmod +x ./script/start_dj
+
+RUN ls -l
+
+
+ENTRYPOINT [ "./script/entry_dj" ]
+CMD [ "./script/start_dj" ]
