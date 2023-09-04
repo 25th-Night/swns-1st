@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +38,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+## Thrid party Apps
+INSTALLED_APPS += []
+
+## Create Apps
+INSTALLED_APPS += [
+    "users",
+    "posts",
+]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
