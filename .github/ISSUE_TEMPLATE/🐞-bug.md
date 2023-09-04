@@ -1,3 +1,11 @@
+---
+name: "\U0001F41E BUG"
+about: BUG 발생 시 작성해주세요.
+title: "\U0001F41E [BUG]"
+labels: bug
+assignees: ''
+
+---
 
 <!-- Title 작성 요령 -->
 <!-- 발생한 버그를 축약한 명사 형태의 문자열로 작성해주세요. -->
