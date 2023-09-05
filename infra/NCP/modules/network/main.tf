@@ -14,3 +14,8 @@ provider "ncloud" {
   site        = public
   support_vpc = true
 }
+
+resource "ncloud_vpc" "vpc" {
+  ipv4_cidr_block = "10.0.0.0/16"
+  name            = "${var.name}-vpc-${var.env}"
+}
