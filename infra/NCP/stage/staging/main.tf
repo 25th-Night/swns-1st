@@ -17,7 +17,6 @@ provider "ncloud" {
 
 locals {
   env                       = "staging"
-  lb_name                   = "be"
   subnet_netnum             = 1
   subnet_type               = "PUBLIC"
   db_name                   = "db"
@@ -65,7 +64,6 @@ module "network" {
 
   ncp_access_key = var.ncp_access_key
   ncp_secret_key = var.ncp_secret_key
-  name           = local.lb_name
   env            = local.env
   subnet_netnum  = local.subnet_netnum
   subnet_type    = local.subnet_type
@@ -124,6 +122,17 @@ module "be" {
   }
   server_image_product_code = local.server_image_product_code
   server_product_code       = data.ncloud_server_product.product.product_code
+}
+
+module "loadBalancer" {
+  source             = "../../modules/loadBalancer"
+  ncp_access_key     = var.ncp_access_key
+  ncp_secret_key     = var.ncp_secret_key
+  vpc_id             = module.network.vpc_id
+  subnet_id          = module.network.subnet_id
+  name               = local.be_name
+  env                = local.env
+  server_instance_no = module.be.server_instance_no
 }
 
 resource "ncloud_public_ip" "db_public_ip" {
