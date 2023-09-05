@@ -25,7 +25,6 @@ variable "subnet_id" {
 variable "port_range" {
   type = string
 }
-}
 
 variable "init_script_path" {
   type = string
@@ -33,4 +32,12 @@ variable "init_script_path" {
 
 variable "init_script_envs" {
   type = map(any)
+}
+
+variable "server_image_product_code" {
+  type = string
+}
+
+variable "server_product_code" {
+  type = string
 }
