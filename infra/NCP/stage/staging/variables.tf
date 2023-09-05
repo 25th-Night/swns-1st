@@ -43,3 +43,27 @@ variable "postgres_volume" {
 variable "db_container_name" {
   type = string
 }
+
+variable "django_settings_module" {
+  type = string
+}
+
+variable "django_secret_key" {
+  type = string
+}
+
+variable "django_container_name" {
+  type = string
+}
+
+variable "ncr_host" {
+  type = string
+}
+
+variable "ncr_image" {
+  type = string
+}
+
+variable "ncp_lb_domain" {
+  type = string
+}
