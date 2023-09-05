@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 RUN apt-get update && apt install -y nginx vim curl
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
-RUN chown -R www-data:www-data /var/lib nginx
+RUN chown -R www-data:www-data /var/lib/nginx
 
 COPY ./config/django.nginx /etc/nginx/sites-available/django
 
