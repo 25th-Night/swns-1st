@@ -30,10 +30,11 @@ resource "ncloud_subnet" "lb-subnet" {
 }
 
 resource "ncloud_lb_target_group" "tg" {
-  name     = "${var.name}-tg-${var.env}"
-  vpc_no   = var.vpc_id
-  protocol = "PROXY_TCP"
-  port     = 8000
+  name        = "${var.name}-tg-${var.env}"
+  vpc_no      = var.vpc_id
+  protocol    = "PROXY_TCP"
+  target_type = "VSVR"
+  port        = 8000
   health_check {
     protocol       = "TCP"
     port           = 8000
@@ -54,9 +55,9 @@ resource "ncloud_lb_target_group_attachment" "tg-att" {
 resource "ncloud_lb" "load_balancer" {
   name         = "${var.name}-lb-${var.env}"
   network_type = "PUBLIC"
-  type         = "NETWORK"
+  type         = "NETWORK_PROXY"
   subnet_no_list = [
-    var.subnet_id
+    ncloud_subnet.lb-subnet.subnet_no
   ]
 }
 
