@@ -10,8 +10,8 @@ terraform {
 provider "ncloud" {
   access_key  = var.ncp_access_key
   secret_key  = var.ncp_secret_key
-  region      = KR
-  site        = public
+  region      = "KR"
+  site        = "public"
   support_vpc = true
 }
 
