@@ -25,3 +25,12 @@ variable "subnet_id" {
 variable "port_range" {
   type = string
 }
+}
+
+variable "init_script_path" {
+  type = string
+}
+
+variable "init_script_envs" {
+  type = map(any)
+}

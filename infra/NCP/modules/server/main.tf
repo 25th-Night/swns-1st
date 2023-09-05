@@ -38,3 +38,11 @@ resource "ncloud_access_control_group_rule" "acg-rule" {
     description = "accept ${var.port_range} port for ${var.name}"
   }
 }
+
+resource "ncloud_init_script" "init" {
+  name = "set-${var.name}-server-${var.env}"
+  content = templatefile(
+    "${path.module}/${var.init_script_path}",
+    var.init_script_envs
+  )
+}
