@@ -50,3 +50,19 @@ resource "ncloud_lb_target_group_attachment" "tg-att" {
     var.server_instance_no
   ]
 }
+
+resource "ncloud_lb" "load_balancer" {
+  name         = "${var.name}-lb-${var.env}"
+  network_type = "PUBLIC"
+  type         = "NETWORK"
+  subnet_no_list = [
+    var.subnet_id
+  ]
+}
+
+resource "ncloud_lb_listener" "lb_listner" {
+  load_balancer_no = ncloud_lb.load_balancer.load_balancer_no
+  protocol         = "TCP"
+  port             = 80
+  target_group_no  = ncloud_lb_target_group.tg.target_group_no
+}
