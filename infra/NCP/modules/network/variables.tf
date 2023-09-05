@@ -13,3 +13,11 @@ variable "name" {
 variable "env" {
   type = string
 }
+
+variable "subnet_netnum" {
+  type = string
+}
+
+variable "subnet_type" {
+  type = string
+}
