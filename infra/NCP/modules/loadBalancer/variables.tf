@@ -5,3 +5,19 @@ variable "ncp_access_key" {
 variable "ncp_secret_key" {
   type = string
 }
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "name" {
+  type = string
+}
+
+variable "env" {
+  type = string
+}
+
+variable "server_instance_no" {
+  type = string
+}
