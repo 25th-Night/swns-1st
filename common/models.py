@@ -7,8 +7,8 @@ class CommonModel(models.Model):
     updated_at = models.DateTimeField(verbose_name="갱신일", auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         indexes = [
-            models.Index(fields=['-created_at']),
+            models.Index(fields=["-created_at"]),
         ]
         abstract = True
