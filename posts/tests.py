@@ -19,10 +19,16 @@ class PostModelTestCase(TestCase):
             status=Post.StatusChoices.DRAFT,
             publish=timezone.now(),
         )
+        self.post.tags.add("tag1", "tag2", "tag3")
 
     def test_save_method(self):
         expected_result = "test-post-title"
         self.assertEqual(self.post.slug, expected_result)
+
+    def test_tags_field(self):
+        tag_list = list(self.post.tags.values_list("name", flat=True))
+        expected_result = ["tag1", "tag2", "tag3"]
+        self.assertEqual(tag_list, expected_result)
 
     def tearDown(self):
         self.post.delete()
