@@ -41,7 +41,9 @@ INSTALLED_APPS = [
 ]
 
 ## Thrid party Apps
-INSTALLED_APPS += []
+INSTALLED_APPS += [
+    "taggit",
+]
 
 ## Create Apps
 INSTALLED_APPS += [
