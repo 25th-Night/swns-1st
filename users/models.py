@@ -66,6 +66,27 @@ class User(CommonModel, AbstractBaseUser, PermissionsMixin):
         return self.is_admin
 
 
+class Profile(CommonModel, models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.PROTECT, verbose_name="유저", related_name="profile"
+    )
+    nickname = models.TextField(verbose_name="닉네임", max_length=30)
+    birthday = models.DateField(verbose_name="생년월일")
+    image_url = models.URLField(verbose_name="프로필사진", null=True, blank=True)
+    is_public = models.BooleanField(verbose_name="공개여부", default=False)
+
+    class Meta:
+        verbose_name = "프로필"
+        verbose_name_plural = "프로필 목록"
+        indexes = [
+            models.Index(fields=["-updated_at"]),
+        ]
+        ordering = ["-updated_at"]
+
+    def __str__(self):
+        return f"{self.user}의 프로필"
+
+
 class Follow(models.Model):
     user_from = models.ForeignKey(
         "users.User",
