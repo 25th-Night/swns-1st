@@ -8,9 +8,9 @@ on:
             - develop
         paths:
             - ./**
-            - '!docker/.**'
-            - '!infra/.**'
-            - '!script/.**'
+            - '!docker/**'
+            - '!infra/**'
+            - '!script/**'
             - '!.github/workflows/CI.yaml'
             - '!.github/workflows/CD_main.yaml'
 
