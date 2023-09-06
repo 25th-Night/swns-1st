@@ -6,22 +6,23 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN mkdir ${APP_HOME}
-COPY . ${APP_HOME}
-
 WORKDIR ${APP_HOME}
 
 RUN apk add --no-cache --upgrade bash jq curl
 
+COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN sed -i 's/\r$//g' ./script/entry_dj
-RUN chmod +x ./script/entry_dj
+COPY . ${APP_HOME}
 
-RUN sed -i 's/\r$//g' ./script/start_dj
-RUN chmod +x ./script/start_dj
+COPY ./script/entry_dj /entry
+RUN sed -i 's/\r$//g' /entry
+RUN chmod +x /entry
 
-RUN ls -l
+COPY ./script/start_dj /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
 
 
-ENTRYPOINT [ "./script/entry_dj" ]
-CMD [ "./script/start_dj" ]
+ENTRYPOINT [ "/entry" ]
+CMD [ "/start" ]
