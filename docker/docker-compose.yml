@@ -9,7 +9,7 @@ services:
     env_file:
       - ../.envs/local/db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_swns:/var/lib/postgresql/data
 
   swns:
     depends_on:
@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
     command:
-      - "./script/start_dj"
+      - "/start"
     env_file:
       - ../.envs/local/db
       - ../.envs/local/django
@@ -50,4 +50,4 @@ services:
 
 volumes:
   swns-static:
-  postgres_data:
+  postgres_swns:
