@@ -38,7 +38,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: test
-              run:
+              run: |
                 docker compose -f docker/docker-compose_test.yml up -d --build
                 docker compose -f docker/docker-compose_test.yml exec swns python manage.py test
             
