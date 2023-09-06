@@ -6,8 +6,8 @@ on:
             - 'feat/**'
         paths:
             - ./**
-            - '!infra/.**'
-            - '!script/.**'
+            - '!infra/**'
+            - '!script/**'
 
 env:
     IMAGE: ${{ vars.NCR_HOST }}/swns
@@ -69,13 +69,3 @@ jobs:
               if: ${{ always() }}
               run: |
                 docker compose -f docker/docker-compose_test.yml down
-
-
-
-
-
-
-
-
-
-
