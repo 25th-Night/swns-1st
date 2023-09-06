@@ -20,4 +20,3 @@ services:
       - ../.envs/local/db
       - ../.envs/local/django
       - ../.envs/local/server
-      - ../.envs/prod/ncp
