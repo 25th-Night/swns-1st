@@ -48,7 +48,13 @@
 <br>
 
 ## 📑 Check List
-### 🗄️ 1st. 초기 셋팅
+
+### 0️⃣0️⃣ DB & API설계
+
+- [x]  DB 설계
+- [x]  API 설계
+
+### 0️⃣1️⃣ 초기 셋팅
 
 - [x]  github 관련 설정
 - [x]  가상환경 및 장고 설치
@@ -58,7 +64,37 @@
 - [x]  stage에 따른 설정 파일 분리
 - [x]  환경변수 관련 디렉토리 및 파일 생성
 
+### 0️⃣2️⃣ Docker 셋팅
 
+- [x]  Dockerfile for Django - 작성
+- [x]  관련 스크립트 파일 작성
+- [x]  Django 프로젝트에서 psycopg2 사용 설정
+- [x]  Dockerfile for nginx in ubuntu - 작성
+- [x]  관련 스크립트 파일 작성
+- [x]  docker-compose.yml for local 환경 - 작성
+- [x]  local 환경에서 사용할 환경변수 파일 작성
+- [x]  docker-compose.yml for test - 작성
+
+### 0️⃣3️⃣ Terraform 셋팅
+
+- [x]  디렉토리 및 파일 생성
+- [x]  기본 모듈 : `network` 작성
+- [x]  기본 모듈 : `server` 작성
+- [x]  기본 모듈 : `loadBalancer` 작성
+- [x]  서버 모듈 : `staging` 작성
+- [x]  서버 모듈 : `prod` 작성
+- [x]  배포 스크립트 작성
+- [x]  SSH provider를 이용한 배포
+- [x]  정상 생성 및 배포 확인
+
+### 0️⃣4️⃣ CI/CD 셋팅
+
+- [x]  github repository - Settings - Secrets and variables 설정
+- [x]  github 환경 설정 - `branch protection rule`
+- [x]  CI : feature 브랜치로 push 이벤트 발생 시
+- [x]  CD : develop 브랜치로 PR이 완료 시 staging 서버로 배포
+- [x]  CD : main 브랜치로 PR이 완료 시 prod 서버로 배포
+- [x]  Django 앱 이미지 교체 (로컬/원격 환경 및 NCR)
 
 
 <br>
@@ -68,7 +104,7 @@
 - [01. 초기 셋팅](https://www.notion.so/browneyed/01-81b4ca5fab734a14b1e50bfe56b307ec?pvs=4)
 - [02. Docker 셋팅](https://www.notion.so/browneyed/02-Docker-54acd08e87744d1bb7edf096ce365e19?pvs=4)
 - [03. Terraform 셋팅](https://notion.so/1bc02cc29f784493be1a104edf900f9f)
-
+- [04. CI/CD 셋팅](https://notion.so/d4c0eef1aa734e3ca7aa3b7f23836902)
 
 
 <br>
