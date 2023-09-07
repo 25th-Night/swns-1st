@@ -15,9 +15,9 @@ on:
 
 
 env:
-    IMAGE: ${{ vars.NCR_HOST }}/swns-dj
-    IMAGE_TAG: ${{ vars.NCR_HOST }}/swns-dj:latest
-    CONTAINER_NAME: swns-dj
+    IMAGE: ${{ vars.NCR_HOST }}/swns
+    IMAGE_TAG: ${{ vars.NCR_HOST }}/swns:latest
+    CONTAINER_NAME: be-prod
 
 jobs:
     deploy-prod:
