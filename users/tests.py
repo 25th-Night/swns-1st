@@ -9,8 +9,8 @@ class SignUpViewTest(APITestCase):
     # Set up
     @classmethod
     def setUpTestData(cls):
-        cls.user_model = get_user_model()
-        cls.signup_url = reverse("signup")
+        cls.test_model = get_user_model()
+        cls.test_url = reverse("signup")
         cls.valid_user_data = {
             "email": "valid_user@test.com",
             "fullname": "Valid User",
@@ -43,32 +43,67 @@ class SignUpViewTest(APITestCase):
         }
 
     def test_signup_valid_data(self):
-        res: HttpResponse = self.client.post(self.signup_url, self.valid_user_data)
+        res: HttpResponse = self.client.post(self.test_url, self.valid_user_data)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(self.user_model.objects.count(), 1)
+        self.assertEqual(self.test_model.objects.count(), 1)
 
     def test_signup_invalid_email_data(self):
-        res: HttpResponse = self.client.post(self.signup_url, self.invalid_user_data1)
+        res: HttpResponse = self.client.post(self.test_url, self.invalid_user_data1)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(self.user_model.objects.count(), 0)
+        self.assertEqual(self.test_model.objects.count(), 0)
 
     def test_signup_invalid_fullname_data(self):
-        res: HttpResponse = self.client.post(self.signup_url, self.invalid_user_data2)
+        res: HttpResponse = self.client.post(self.test_url, self.invalid_user_data2)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(self.user_model.objects.count(), 0)
+        self.assertEqual(self.test_model.objects.count(), 0)
 
     def test_signup_invalid_phone_data(self):
-        valid_user = self.client.post(self.signup_url, self.valid_user_data)
-        res: HttpResponse = self.client.post(self.signup_url, self.invalid_user_data3)
+        valid_user = self.client.post(self.test_url, self.valid_user_data)
+        res: HttpResponse = self.client.post(self.test_url, self.invalid_user_data3)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(self.user_model.objects.count(), 1)
+        self.assertEqual(self.test_model.objects.count(), 1)
 
     def test_signup_invalid_password_data(self):
-        res: HttpResponse = self.client.post(self.signup_url, self.invalid_user_data4)
+        res: HttpResponse = self.client.post(self.test_url, self.invalid_user_data4)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(self.user_model.objects.count(), 0)
+        self.assertEqual(self.test_model.objects.count(), 0)
+
+
+class LoginViewTest(APITestCase):
+    # Set up
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_model = get_user_model()
+        cls.test_url = reverse("login")
+        cls.test_user = cls.test_model.objects.create_user(
+            email="test@example.com",
+            fullname="Test User",
+            phone="01293845642",
+            password="password",
+        )
+        cls.valid_user_data = {
+            "email": "test@example.com",
+            "password": "password",
+        }
+        cls.invalid_user_data = {
+            "email": "test@example.com",
+            "password": "invalid_password",
+        }
+
+    def test_login_valid_data(self):
+        res: HttpResponse = self.client.post(self.test_url, self.valid_user_data)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("access", res.data.get("token"))
+        self.assertIn("refresh", res.data.get("token"))
+
+    def test_login_invalid_password(self):
+        res: HttpResponse = self.client.post(self.test_url, self.invalid_user_data)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn("token", res.data)
