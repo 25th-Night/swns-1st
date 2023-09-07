@@ -6,13 +6,12 @@ on:
             - closed
         branches:
             - develop
-        paths:
-            - ./**
-            - '!docker/.**'
-            - '!infra/.**'
-            - '!script/.**'
-            - '!.github/workflows/CI.yaml'
-            - '!.github/workflows/CD_main.yaml'
+        paths-ignore:
+            - 'docker/**'
+            - 'infra/**'
+            - 'script/**'
+            - '.github/workflows/CI.yaml'
+            - '.github/workflows/CD_main.yaml'
 
 
 env:

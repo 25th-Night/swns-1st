@@ -4,10 +4,9 @@ on:
     push:
         branches:
             - 'feat/**'
-        paths:
-            - ./**
-            - '!infra/**'
-            - '!script/**'
+        paths-ignore:
+            - 'infra/**'
+            - 'script/**'
 
 env:
     IMAGE: ${{ vars.NCR_HOST }}/swns
@@ -42,7 +41,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: test
-              run:
+              run: |
                 docker compose -f docker/docker-compose_test.yml up -d --build
                 docker compose -f docker/docker-compose_test.yml exec swns python manage.py test
             
@@ -60,7 +59,7 @@ jobs:
             - name: Build and Push
               uses: docker/build-push-action@v4
               with:
-                context: ../
+                context: .
                 tags: ${{ env.IMAGE_TAG}}, ${{ env.IMAGE}}:${{ steps.image-tag.outputs.TIMESTAMP }}
                 file: ./docker/Dockerfile_dj
                 push: true
