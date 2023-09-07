@@ -15,8 +15,8 @@ on:
 
 
 env:
-    IMAGE: ${{ vars.NCR_HOST }}/lion-app
-    IMAGE_TAG: ${{ vars.NCR_HOST }}/lion-app:latest
+    IMAGE: ${{ vars.NCR_HOST }}/swns-dj
+    IMAGE_TAG: ${{ vars.NCR_HOST }}/swns-dj:latest
     CONTAINER_NAME: swns-dj
 
 jobs:
