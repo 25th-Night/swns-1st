@@ -5,14 +5,13 @@ on:
         types:
             - closed
         branches:
-            - develop
-        paths:
-            - ./**
-            - '!docker/.**'
-            - '!infra/.**'
-            - '!script/.**'
-            - '!.github/workflows/CI.yaml'
-            - '!.github/workflows/CD_dev.yaml'
+            - main
+        paths-ignore:
+            - 'docker/.**'
+            - 'infra/.**'
+            - 'script/.**'
+            - '.github/workflows/CI.yaml'
+            - '.github/workflows/CD_dev.yaml'
 
 
 env:
