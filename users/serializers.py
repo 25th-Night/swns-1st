@@ -1,5 +1,6 @@
+from attr import fields
 from rest_framework import serializers
-from users.models import User, Profile
+from users.models import Follow, User, Profile
 
 
 class SignUpSeiralizer(serializers.ModelSerializer):
@@ -36,15 +37,16 @@ class LoginSeiralizer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ("groups", "user_permissions")
-        extra_kwargs = {"password": {"write_only": True}}
-        read_only_fields = (
+        fields = (
+            "id",
             "email",
-            "is_admin",
-            "following",
-            "created_at",
-            "updated_at",
+            "fullname",
+            "password",
+            "phone",
+            "is_active",
         )
+        extra_kwargs = {"password": {"write_only": True}}
+        read_only_fields = ("email",)
 
     def update(self, instance, validated_data):
         if "password" in validated_data:
@@ -61,8 +63,16 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = "__all__"
-        read_only_fields = (
-            "created_at",
-            "updated_at",
+        fields = (
+            "nickname",
+            "birthday",
+            "image_url",
+            "is_public",
+            "is_active",
         )
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        exclude = ("created_at",)
