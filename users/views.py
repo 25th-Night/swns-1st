@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -8,15 +9,16 @@ from rest_framework import status, viewsets
 from rest_framework.request import Request
 from rest_framework.decorators import action
 
-from users.models import Profile, User
+from users.models import Follow, Profile, User
 from users.permissions import CustomReadOnly
 from users.serializers import (
+    FollowSerializer,
     ProfileSerializer,
     SignUpSeiralizer,
     LoginSeiralizer,
     UserSerializer,
 )
-from users.filters import UserFilter, ProfileFilter
+from users.filters import FollowFilter, UserFilter, ProfileFilter
 
 
 class SignUpView(APIView):
@@ -91,11 +93,50 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_name="profile")
     def profile(self, request: Request, *args, **kwargs):
-        user = request.user
+        user: User = self.get_object()
 
         profile = user.profile
         serializer = ProfileSerializer(profile)
 
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=r"follow/(?P<id>[0-9]+)",
+    )
+    def follow(self, request: Request, pk, id):
+        user: User = User.objects.get(id=pk)
+
+        followee = get_object_or_404(User, id=id)
+        follow, created = Follow.objects.get_or_create(user_from=user, user_to=followee)
+
+        if created:
+            return Response(
+                data={"message": "Follow successfully"}, status=status.HTTP_201_CREATED
+            )
+
+        follow.delete()
+
+        return Response(
+            data={"message": "Unfollowed successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+    @action(detail=True, methods=["get"], url_name="profile")
+    def following(self, request: Request, *args, **kwargs):
+        user: User = self.get_object()
+
+        following = user.following.all()
+        serializer = self.get_serializer(following, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_name="profile")
+    def follower(self, request: Request, *args, **kwargs):
+        user: User = self.get_object()
+
+        following = user.follower.all()
+        serializer = self.get_serializer(following, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -104,6 +145,18 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filterset_class = ProfileFilter
+
+    def list(self, request: Request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class FollowViewSet(viewsets.ModelViewSet):
+    permission_classes = [CustomReadOnly]
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    filterset_class = FollowFilter
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
