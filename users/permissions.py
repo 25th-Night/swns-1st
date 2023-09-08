@@ -3,6 +3,10 @@ from rest_framework.exceptions import APIException
 from rest_framework import status
 
 
+def class_name(obj):
+    return type(obj).__name__
+
+
 class GenericAPIException(APIException):
     def __init__(self, status_code, detail=None, code=None):
         self.status_code = status_code
@@ -33,7 +37,8 @@ class CustomReadOnly(BasePermission):
         if (
             view.action in self.SAFE_ACTIONS
             or user.is_admin == True
-            or (hasattr(obj, "email") and obj.email == user.email)
+            or (class_name(obj) == "User" and obj.email == user.email)
+            or (class_name(obj) == "Profile" and obj.user == user)
         ):
             return True
         return False
