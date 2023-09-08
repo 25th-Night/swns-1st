@@ -39,6 +39,7 @@ class CustomReadOnly(BasePermission):
             or user.is_admin == True
             or (class_name(obj) == "User" and obj.email == user.email)
             or (class_name(obj) == "Profile" and obj.user == user)
+            or (class_name(obj) == "Follow" and obj.user_from == user)
         ):
             return True
         return False
