@@ -57,6 +57,10 @@ class User(CommonModel, AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = "사용자"
         verbose_name_plural = "사용자 목록"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["-created_at"]),
+        ]
 
     def __str__(self):
         return self.email
@@ -70,7 +74,7 @@ class Profile(CommonModel, models.Model):
     user = models.OneToOneField(
         User, on_delete=models.PROTECT, verbose_name="유저", related_name="profile"
     )
-    nickname = models.TextField(verbose_name="닉네임", max_length=30)
+    nickname = models.TextField(verbose_name="닉네임", max_length=30, unique=True)
     birthday = models.DateField(verbose_name="생년월일")
     image_url = models.URLField(verbose_name="프로필사진", null=True, blank=True)
     is_public = models.BooleanField(verbose_name="공개여부", default=False)
