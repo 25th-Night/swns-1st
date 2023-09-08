@@ -45,7 +45,7 @@ class User(CommonModel, AbstractBaseUser, PermissionsMixin):
         "self",
         verbose_name="팔로우",
         through="users.Follow",
-        related_name="followers",
+        related_name="follower",
         symmetrical=False,
     )
 
