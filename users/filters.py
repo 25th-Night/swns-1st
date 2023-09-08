@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from users.models import User, Profile
+from users.models import Follow, User, Profile
 
 
 class UserFilter(filters.FilterSet):
@@ -21,3 +21,12 @@ class ProfileFilter(filters.FilterSet):
     class Meta:
         model = Profile
         fields = ["nickname", "is_active"]
+
+
+class FollowFilter(filters.FilterSet):
+    user_from = filters.CharFilter(field_name="user_from", lookup_expr="exact")
+    user_to = filters.CharFilter(field_name="user_from", lookup_expr="exact")
+
+    class Meta:
+        model = Follow
+        fields = ["user_from", "user_to"]
