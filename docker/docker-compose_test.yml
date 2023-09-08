@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: swns-db
+    image: postgres:13
+    ports:
+      - 5432:5432
+    env_file:
+      - ../.envs/local/db
+
+  swns:
+    depends_on:
+      - postgres
+    container_name: swns-dj
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile_dj
+    env_file:
+      - ../.envs/local/db
+      - ../.envs/local/django
+      - ../.envs/local/server
