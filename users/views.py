@@ -8,9 +8,11 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.request import Request
 from rest_framework.decorators import action
+from posts.models import Post
+from posts.serializers import PostSerializer
 
 from users.models import Follow, Profile, User
-from users.permissions import CustomReadOnly
+from users.permissions import UserCustomReadOnly
 from users.serializers import (
     FollowSerializer,
     ProfileSerializer,
@@ -75,7 +77,7 @@ class LoginView(APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [CustomReadOnly]
+    permission_classes = [UserCustomReadOnly]
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filterset_class = UserFilter
@@ -139,9 +141,17 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(following, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["get"], url_name="posts")
+    def posts(self, request: Request, *args, **kwargs):
+        user: User = self.get_object()
+        posts = user.posts.all()
+
+        serializer = PostSerializer(posts, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [CustomReadOnly]
+    permission_classes = [UserCustomReadOnly]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filterset_class = ProfileFilter
@@ -153,7 +163,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    permission_classes = [CustomReadOnly]
+    permission_classes = [UserCustomReadOnly]
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     filterset_class = FollowFilter
@@ -161,4 +171,13 @@ class FollowViewSet(viewsets.ModelViewSet):
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"], url_path="posts")
+    def posts(self, request: Request, *args, **kwargs):
+        user = request.user
+        following = user.following.all()
+        posts = Post.objects.filter(author__in=following)
+
+        serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
