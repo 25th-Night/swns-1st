@@ -20,7 +20,7 @@ data "ncloud_vpc" "vpc" {
 }
 
 resource "ncloud_login_key" "loginkey" {
-  key_name = "${var.name}-key-${var.env}"
+  key_name = "${var.name}-loginkey-${var.env}"
 }
 
 resource "ncloud_access_control_group" "acg" {
