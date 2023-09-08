@@ -6,12 +6,17 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.request import Request
+from rest_framework.decorators import action
 
-from django_filters import rest_framework as filters
-
-from users.models import User
+from users.models import Profile, User
 from users.permissions import CustomReadOnly
-from users.serializers import SignUpSeiralizer, LoginSeiralizer, UserSerializer
+from users.serializers import (
+    ProfileSerializer,
+    SignUpSeiralizer,
+    LoginSeiralizer,
+    UserSerializer,
+)
+from users.filters import UserFilter, ProfileFilter
 
 
 class SignUpView(APIView):
@@ -67,16 +72,6 @@ class LoginView(APIView):
         )
 
 
-class UserFilter(filters.FilterSet):
-    email = filters.CharFilter(field_name="email", lookup_expr="icontains")
-    fullname = filters.CharFilter(field_name="fullname", lookup_expr="icontains")
-    phone = filters.CharFilter(field_name="phone", lookup_expr="icontains")
-
-    class Meta:
-        model = User
-        fields = ["email", "fullname", "phone", "is_active"]
-
-
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomReadOnly]
     queryset = User.objects.all()
@@ -93,3 +88,24 @@ class UserViewSet(viewsets.ModelViewSet):
             data={"message": "Create operation is not supported"},
             status=status.HTTP_404_NOT_FOUND,
         )
+
+    @action(detail=True, methods=["get"], url_name="profile")
+    def profile(self, request: Request, *args, **kwargs):
+        user = request.user
+
+        profile = user.profile
+        serializer = ProfileSerializer(profile)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = [CustomReadOnly]
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    filterset_class = ProfileFilter
+
+    def list(self, request: Request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
