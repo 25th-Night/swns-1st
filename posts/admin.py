@@ -6,7 +6,7 @@ from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "slug", "author", "status", "publish"]
+    list_display = ["id", "title", "slug", "author", "status", "publish", "tag_list"]
     list_filter = ["publish", "created_at", "updated_at"]
     search_fields = ["title", "author", "body"]
     raw_id_fields = ["author"]
@@ -33,3 +33,9 @@ class PostAdmin(admin.ModelAdmin):
             obj.publish = new_publish
 
         super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("tags")
+
+    def tag_list(self, obj):
+        return ", ".join(o.name for o in obj.tags.all())
