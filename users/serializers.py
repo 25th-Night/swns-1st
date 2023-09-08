@@ -1,4 +1,3 @@
-from attr import fields
 from rest_framework import serializers
 from users.models import Follow, User, Profile
 
@@ -64,6 +63,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = (
+            "id",
+            "user",
             "nickname",
             "birthday",
             "image_url",
