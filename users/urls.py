@@ -4,10 +4,17 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from users.views import ProfileViewSet, SignUpView, LoginView, UserViewSet
+from users.views import (
+    FollowViewSet,
+    ProfileViewSet,
+    SignUpView,
+    LoginView,
+    UserViewSet,
+)
 
 router = DefaultRouter()
 router.register("profiles", ProfileViewSet, basename="profile")
+router.register("follows", FollowViewSet, basename="follow")
 router.register("", UserViewSet, basename="user")
 # router.register("path명", ViewSet클래스, basename="basename지정")
 
