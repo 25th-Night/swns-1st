@@ -6,7 +6,8 @@
 - Python, Django를 이용한 소셜 네트워크 서비스 애플리케이션 개발
 - Django REST Framework, drf-spectacular를 이용한 백엔드 API 개발
 - Docker를 이용한 컨테이너 형태로의 배포
-- CICD pipeline 구축
+- GitHub Actions를 이용한 CICD pipeline 구축
+- Terraform을 이용한 IaC 구현
 - NCloud에서 로드밸런서를 활용한 클라우드 방식의 배포
 
 <br>
@@ -224,13 +225,15 @@
 
 ## 📅 ERD
 
-- 삽입 예정
+![image](https://github.com/likelion-backend-6th/TrackProject_1_ChoiSeonWoo/assets/104040502/9d266776-e2c1-4777-b169-8cd39a62b265)
 
 <br>
 
 ## API 명세서
+> 하단 Notion 링크를 통해 접속하여 확인 가능
 
-- 삽입 예정
+![API_docs](https://github.com/likelion-backend-6th/TrackProject_1_ChoiSeonWoo/assets/104040502/7af078df-6aca-486d-b0e0-7eefd17fa2b7)
+
 
 <br>
 
