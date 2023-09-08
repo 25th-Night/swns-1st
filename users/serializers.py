@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import User
+from users.models import User, Profile
 
 
 class SignUpSeiralizer(serializers.ModelSerializer):
@@ -30,21 +30,39 @@ class SignUpSeiralizer(serializers.ModelSerializer):
 class LoginSeiralizer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "fullname", "phone")
+        fields = ("id", "email", "fullname", "phone")
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "id",
+        exclude = ("groups", "user_permissions")
+        extra_kwargs = {"password": {"write_only": True}}
+        read_only_fields = (
             "email",
-            "fullname",
-            "phone",
-            "password",
             "is_admin",
             "following",
             "created_at",
+            "updated_at",
         )
-        extra_kwargs = {"password": {"write_only": True}}
-        read_only_fields = ("id", "email", "is_admin", "following", "created_at")
+
+    def update(self, instance, validated_data):
+        if "password" in validated_data:
+            new_password = validated_data.pop("password")
+            instance.set_password(new_password)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+        )
