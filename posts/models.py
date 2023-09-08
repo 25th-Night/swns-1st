@@ -26,7 +26,11 @@ class Post(CommonModel, models.Model):
         unique_for_date="publish",
     )
     author = models.ForeignKey(
-        "users.User", verbose_name="작성자", on_delete=models.SET_NULL, null=True
+        "users.User",
+        verbose_name="작성자",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="posts",
     )
     body = models.TextField(verbose_name="본문")
     status = models.IntegerField(
