@@ -123,7 +123,7 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-    @action(detail=True, methods=["get"], url_name="profile")
+    @action(detail=True, methods=["get"], url_name="following")
     def following(self, request: Request, *args, **kwargs):
         user: User = self.get_object()
 
@@ -131,7 +131,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(following, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=["get"], url_name="profile")
+    @action(detail=True, methods=["get"], url_name="follower")
     def follower(self, request: Request, *args, **kwargs):
         user: User = self.get_object()
 
