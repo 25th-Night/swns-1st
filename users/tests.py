@@ -7,6 +7,7 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from rest_framework.response import Response
 
+from posts.models import Post
 from users.models import Follow, Profile
 
 
@@ -156,6 +157,21 @@ class UserViewSetTest(APITestCase):
         cls.follow03 = Follow.objects.create(
             user_from=cls.user03, user_to=cls.admin_user
         )
+        cls.post01 = Post.objects.create(
+            title="user01-post01",
+            author=cls.user01,
+            body="user01의 1번째 작성 글",
+        )
+        cls.post02 = Post.objects.create(
+            title="user01-post02",
+            author=cls.user01,
+            body="user01의 2번째 작성 글",
+        )
+        cls.post03 = Post.objects.create(
+            title="user02-post01",
+            author=cls.user02,
+            body="user02의 1번째 작성 글",
+        )
 
     def test_list_data(self):
         test_url = reverse("user-list")
@@ -249,6 +265,24 @@ class UserViewSetTest(APITestCase):
         res: Response = client.post(test_url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_posts_data(self):
+        test_url = reverse("user-posts", args=[self.user01.pk])
+        client = APIClient()
+        client.force_authenticate(user=self.user01)
+        res: Response = client.get(test_url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 2)
+
+    def test_following_posts_data(self):
+        test_url = reverse("user-following-posts", args=[self.admin_user.pk])
+        client = APIClient()
+        client.force_authenticate(user=self.admin_user)
+        res: Response = client.get(test_url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 3)
 
 
 class ProfileViewSetTest(APITestCase):
