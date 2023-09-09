@@ -333,6 +333,7 @@
 - [08. (🐞 BUG) Docker & CI/CD](https://notion.so/9a2d41b6042b466f90af5fe3589786a5)
 - [09. (🐞 BUG) Model](https://notion.so/fe769e41e06e43ce9e90348c67c81187)
 - [10. (👑 FEATURE) Post](https://notion.so/d3ec4bc1f1654d0797794085918721ef)
+- [11. (👑 FEATURE) OpenAPI](https://notion.so/820a1c6a6da34d9d89495378a0531799)
 
 
 <br>
@@ -341,9 +342,7 @@
 
 **우선순위 기준으로 작성**
 
-- [ ] 테스트 코드 추가 작성
 - [ ] 생성/그외 목적의 Serializer 분리
-- [ ] DRF-Spectacular 라이브러리를 이용한 API Docs 생성
 - [ ] API 명세서 추가 작성 (Request, Response)
 - [ ] 데이터 유효성 검증 추가 및 테스트 코드 개선
 - [ ] 쿼리 속도 개선

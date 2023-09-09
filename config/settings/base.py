@@ -48,6 +48,7 @@ INSTALLED_APPS += [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "django_filters",
+    "drf_spectacular_sidecar",
 ]
 
 ## Create Apps
@@ -164,6 +165,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 
@@ -177,4 +179,15 @@ SIMPLE_JWT = {
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+}
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "SWNS API",
+    "DESCRIPTION": "SW's Network Service",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
 }

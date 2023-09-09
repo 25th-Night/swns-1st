@@ -19,4 +19,9 @@ class PostFilter(filters.FilterSet):
 
     def filter_by_tags(self, queryset, name, value):
         tags = value.split(",")
-        return queryset.filter(tags__name__in=tags)
+        result = queryset
+
+        for tag in tags:
+            result = result.filter(tags__name=tag)
+
+        return result
