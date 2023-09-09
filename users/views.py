@@ -149,6 +149,18 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["get"], url_path="following-posts")
+    def following_posts(self, request: Request, *args, **kwargs):
+        user: User = self.get_object()
+        print(user)
+        following = user.following.all()
+        print(following)
+        posts = Post.objects.filter(author__in=following)
+        print(posts)
+
+        serializer = PostSerializer(posts, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [UserCustomReadOnly]
@@ -171,13 +183,4 @@ class FollowViewSet(viewsets.ModelViewSet):
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=["get"], url_path="posts")
-    def posts(self, request: Request, *args, **kwargs):
-        user = request.user
-        following = user.following.all()
-        posts = Post.objects.filter(author__in=following)
-
-        serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
