@@ -43,3 +43,13 @@ class Image:
             print("Set the Image to Public Successfully")
         except Exception as e:
             print(f"Image setting to public failed: {e}")
+
+
+def image_s3_upload(validated_data):
+    if "image" in validated_data:
+        image_file = validated_data.pop("image")
+        image = Image(image_file)
+        image.s3_upload()
+        image.set_public_in_s3()
+        validated_data["image_url"] = image.url
+    return validated_data
