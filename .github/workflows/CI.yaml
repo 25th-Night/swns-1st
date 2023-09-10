@@ -44,6 +44,9 @@ jobs:
               run: |
                 docker compose -f docker/docker-compose_test.yml up -d --build
                 docker compose -f docker/docker-compose_test.yml exec swns python manage.py test
+              env:
+                NCP_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}
+                NCP_SECRET_KEY: ${{ secrets.NCP_SECRET_KEY }}
             
             - name: Login to NCR
               uses: docker/login-action@v2
