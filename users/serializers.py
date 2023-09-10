@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
 from users.models import Follow, User, Profile
-from common.utils import Image
+from common.utils import image_s3_upload
 
 
 class SignUpSeiralizer(serializers.ModelSerializer):
@@ -73,26 +76,19 @@ class ProfileUploadSerializer(serializers.ModelSerializer):
             "nickname",
             "birthday",
             "image",
-            "is_public",
-            "is_active",
+            "image_url",
         )
+        extra_kwargs = {"image": {"write_only": True}}
+        read_only_fields = ("image_url",)
 
     def create(self, validated_data):
-        image_file = validated_data.pop("image")
-        image = Image(image_file)
-        image.s3_upload()
-        image.set_public_in_s3()
-        validated_data["image_url"] = image.url
+        validated_data = image_s3_upload(validated_data)
         instance = super().create(validated_data)
 
         return instance
 
-    def update(self, validated_data):
-        image_file = validated_data.pop("image")
-        image = Image(image_file)
-        image.s3_upload()
-        image.set_public_in_s3()
-        validated_data["image_url"] = image.url
+    def update(self, instance, validated_data):
+        validated_data = image_s3_upload(validated_data)
         instance = super().update(instance, validated_data)
 
         return instance
@@ -101,6 +97,7 @@ class ProfileUploadSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_user(self, obj: Profile):
         user = obj.user
         return UserSerializer(user).data
