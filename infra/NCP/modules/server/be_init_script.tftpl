@@ -15,6 +15,10 @@ POSTGRES_USER="${postgres_user}"
 POSTGRES_PASSWORD="${postgres_password}"
 POSTGRES_PORT="${postgres_port}"
 DB_HOST="${db_host}"
+AWS_ACCESS_KEY_ID="${aws_access_key_id}"
+AWS_SECRET_ACCESS_KEY="${aws_secret_access_key}"
+AWS_REGION="${aws_region}"
+AWS_STORAGE_BUCKET_NAME="${aws_storage_bucket_name}"
 
 
 REMOTE_DIRECTORY=/home/$USERNAME/
@@ -58,6 +62,10 @@ echo "POSTGRES_USER=$POSTGRES_USER" >> $ENV_PATH
 echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> $ENV_PATH
 echo "POSTGRES_PORT=$POSTGRES_PORT" >> $ENV_PATH
 echo "DB_HOST=$DB_HOST" >> $ENV_PATH
+echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $ENV_PATH
+echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $ENV_PATH
+echo "AWS_REGION=$AWS_REGION" >> $ENV_PATH
+echo "AWS_STORAGE_BUCKET_NAME=$AWS_STORAGE_BUCKET_NAME" >> $ENV_PATH
 
 
 echo "Set alias to \"$BASH_ALIASES\" file"

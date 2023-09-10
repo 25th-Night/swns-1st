@@ -3,11 +3,20 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.request import Request
 from rest_framework.decorators import action
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+from drf_spectacular.utils import extend_schema
+
 from posts.models import Post
 from posts.serializers import PostSerializer
 
@@ -15,6 +24,7 @@ from users.models import Follow, Profile, User
 from users.permissions import UserCustomReadOnly
 from users.serializers import (
     FollowSerializer,
+    ProfileUploadSerializer,
     ProfileSerializer,
     SignUpSeiralizer,
     LoginSeiralizer,
@@ -23,6 +33,7 @@ from users.serializers import (
 from users.filters import FollowFilter, UserFilter, ProfileFilter
 
 
+@extend_schema(tags=["Auth"])
 class SignUpView(APIView):
     serializer_class = SignUpSeiralizer
     permission_classes = [AllowAny]
@@ -48,6 +59,7 @@ class SignUpView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=["Auth"])
 class LoginView(APIView):
     serializer_class = LoginSeiralizer
     permission_classes = [AllowAny]
@@ -76,6 +88,17 @@ class LoginView(APIView):
         )
 
 
+@extend_schema(tags=["Auth"])
+class TokenObtainPairView_(TokenObtainPairView):
+    pass
+
+
+@extend_schema(tags=["Auth"])
+class TokenRefreshView_(TokenRefreshView):
+    pass
+
+
+@extend_schema(tags=["User"])
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [UserCustomReadOnly]
     queryset = User.objects.all()
@@ -149,12 +172,27 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["get"], url_path="following-posts")
+    def following_posts(self, request: Request, *args, **kwargs):
+        user: User = self.get_object()
+        following = user.following.all()
+        posts = Post.objects.filter(author__in=following)
 
+        serializer = PostSerializer(posts, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+@extend_schema(tags=["Profile"])
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [UserCustomReadOnly]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filterset_class = ProfileFilter
+
+    def get_serializer_class(self):
+        if self.action not in ["list", "retrieve"]:
+            return ProfileUploadSerializer
+        return super().get_serializer_class()
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -162,6 +200,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(tags=["Follow"])
 class FollowViewSet(viewsets.ModelViewSet):
     permission_classes = [UserCustomReadOnly]
     queryset = Follow.objects.all()
@@ -171,13 +210,4 @@ class FollowViewSet(viewsets.ModelViewSet):
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=["get"], url_path="posts")
-    def posts(self, request: Request, *args, **kwargs):
-        user = request.user
-        following = user.following.all()
-        posts = Post.objects.filter(author__in=following)
-
-        serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

@@ -236,6 +236,20 @@
 
 <br>
 
+## 배포 URL
+
+### [🚧 `staging` Server URL](http://be-lb-staging-19480782-5e27276c4a42.kr.lb.naverncp.com/)
+
+> [📜 `OpenAPI` URL](http://be-lb-staging-19480782-5e27276c4a42.kr.lb.naverncp.com/api/docs/)
+
+### [🏳‍🌈 `production` Server URL](http://be-lb-prod-19480757-e92e545ff666.kr.lb.naverncp.com)
+
+> [📜 `OpenAPI` URL](http://be-lb-prod-19480757-e92e545ff666.kr.lb.naverncp.com/api/docs/)
+
+
+
+<br>
+
 ## 📑 Check List
 
 ### 0️⃣0️⃣ DB & API설계
@@ -318,6 +332,26 @@
 - [x]  내가 팔로우한 유저의 게시글 모아보기 기능 구현
 - [x]  해당 기능 테스트
 
+### 0️⃣8️⃣ OpenAPI
+
+- [x]  drf-spectacular 관련 라이브러리 설치
+- [x]  OpenAPI Swagger 생성
+- [x]  각 앱별 drf-spectacular 추가 설정
+
+### 0️⃣9️⃣ Image
+
+- [x]  NCloud Object Storage 생성
+- [x]  `boto3` 라이브러리 설치 및 `Object Storage` 설정
+- [x]  프로필 이미지 업로드 기능 추가
+- [x]  프로필 이미지 기능 테스트
+- [x]  AWS S3 버킷 생성
+- [x]  `django-storages` 라이브러리 설치 및 `S3` 설정
+- [x]  정적 파일 정상 서빙 확인
+- [x]  Terraform 코드 수정
+
+
+
+
 
 <br>
 
@@ -333,6 +367,8 @@
 - [08. (🐞 BUG) Docker & CI/CD](https://notion.so/9a2d41b6042b466f90af5fe3589786a5)
 - [09. (🐞 BUG) Model](https://notion.so/fe769e41e06e43ce9e90348c67c81187)
 - [10. (👑 FEATURE) Post](https://notion.so/d3ec4bc1f1654d0797794085918721ef)
+- [11. (👑 FEATURE) OpenAPI](https://notion.so/820a1c6a6da34d9d89495378a0531799)
+- [12. (👑 IMAGE) OpenAPI](https://notion.so/2d88d0e5590d46368c817d08c3967b20)
 
 
 <br>
@@ -341,9 +377,7 @@
 
 **우선순위 기준으로 작성**
 
-- [ ] 테스트 코드 추가 작성
 - [ ] 생성/그외 목적의 Serializer 분리
-- [ ] DRF-Spectacular 라이브러리를 이용한 API Docs 생성
 - [ ] API 명세서 추가 작성 (Request, Response)
 - [ ] 데이터 유효성 검증 추가 및 테스트 코드 개선
 - [ ] 쿼리 속도 개선

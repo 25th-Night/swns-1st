@@ -30,6 +30,7 @@ locals {
   be_port_range             = "8000"
   be_init_script_path       = "be_init_script.tftpl"
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
+  aws_region                = "ap-northeast-2"
 }
 
 data "ncloud_server_product" "product" {
@@ -108,21 +109,25 @@ module "be" {
   port_range       = local.be_port_range
   init_script_path = local.be_init_script_path
   init_script_envs = {
-    username               = var.username
-    password               = var.password
-    django_settings_module = var.django_settings_module
-    django_secret_key      = var.django_secret_key
-    django_container_name  = var.django_container_name
-    ncr_host               = var.ncr_host
-    ncr_image              = var.ncr_image
-    ncp_access_key         = var.ncp_access_key
-    ncp_secret_key         = var.ncp_secret_key
-    ncp_lb_domain          = var.ncp_lb_domain
-    postgres_db            = var.postgres_db
-    postgres_user          = var.postgres_user
-    postgres_password      = var.postgres_password
-    postgres_port          = local.db_port_range
-    db_host                = ncloud_public_ip.db_public_ip.public_ip
+    username                = var.username
+    password                = var.password
+    django_settings_module  = var.django_settings_module
+    django_secret_key       = var.django_secret_key
+    django_container_name   = var.django_container_name
+    ncr_host                = var.ncr_host
+    ncr_image               = var.ncr_image
+    ncp_access_key          = var.ncp_access_key
+    ncp_secret_key          = var.ncp_secret_key
+    ncp_lb_domain           = var.ncp_lb_domain
+    postgres_db             = var.postgres_db
+    postgres_user           = var.postgres_user
+    postgres_password       = var.postgres_password
+    postgres_port           = local.db_port_range
+    db_host                 = ncloud_public_ip.db_public_ip.public_ip
+    aws_access_key_id       = var.aws_access_key_id
+    aws_secret_access_key   = var.aws_secret_access_key
+    aws_region              = local.aws_region
+    aws_storage_bucket_name = var.aws_storage_bucket_name
   }
   server_image_product_code = local.server_image_product_code
   server_product_code       = data.ncloud_server_product.product.product_code
