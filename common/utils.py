@@ -14,12 +14,12 @@ class Image:
         self.id = str(uuid.uuid4())
         self.ext = self.name.split(".")[-1]
         self.directory = datetime.now().date()
-        self.filename = f"{self.directory}/{self.id}.{self.ext}"
+        self.filename = f"MEDIA/profile/{self.directory}/{self.id}.{self.ext}"
         self.url = None
         self.access_key = settings.NCP_ACCESS_KEY
         self.secret_key = settings.NCP_SECRET_KEY
-        self.endpoint_url = settings.S3_ENDPOINT_URL
-        self.bucket_name = settings.S3_BUCKET_NAME
+        self.endpoint_url = settings.NCP_S3_ENDPOINT_URL
+        self.bucket_name = settings.NCP_S3_BUCKET_NAME
         self.client: client = client(
             service_name="s3",
             endpoint_url=self.endpoint_url,
