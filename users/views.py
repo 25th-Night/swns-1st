@@ -24,6 +24,7 @@ from users.models import Follow, Profile, User
 from users.permissions import UserCustomReadOnly
 from users.serializers import (
     FollowSerializer,
+    ProfileUploadSerializer,
     ProfileSerializer,
     SignUpSeiralizer,
     LoginSeiralizer,
@@ -190,6 +191,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filterset_class = ProfileFilter
+
+    def get_serializer_class(self):
+        if self.action not in ["list", "retrieve"]:
+            return ProfileUploadSerializer
+        return super().get_serializer_class()
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
