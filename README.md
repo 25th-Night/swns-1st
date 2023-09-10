@@ -125,18 +125,23 @@
 <br>
 
 ## 🪓 주요 설치 패키지/모듈
-|    종류     |                이름                 |   버전   |
-|:---------:|:---------------------------------:|:------:|
-| Language  |            **python**             |  3.11  |
-| Framework |            **Django**             | 4.2.4  |
-| Database  |          **PostgreSQL**           |   13   |
-|  Library  |           **gunicorn**            | 21.2.0 |
-|  Library  |        **psycopg2-binary**        | 2.9.7  |
-|  Library  |      **djangorestframework**      | 3.14.0 |
-|  Library  | **djangorestframework-simplejwt** | 5.3.0  |
-|  Library  |         **django-filter**         |  23.2  |
-|  Library  |         **django-taggit**         | 4.0.0  |
-|  Library  |        **drf-spectacular**        | 0.26.4 |
+
+|   종류    |               이름                |   버전   |
+|:---------:|:---------------------------------:|:--------:|
+| Language  |            **python**             |   3.11   |
+| Framework |            **Django**             |  4.2.4   |
+| Database  |          **PostgreSQL**           |    13    |
+|  Library  |           **gunicorn**            |  21.2.0  |
+|  Library  |        **psycopg2-binary**        |  2.9.7   |
+|  Library  |      **djangorestframework**      |  3.14.0  |
+|  Library  | **djangorestframework-simplejwt** |  5.3.0   |
+|  Library  |         **django-filter**         |   23.2   |
+|  Library  |         **django-taggit**         |  4.0.0   |
+|  Library  |        **drf-spectacular**        |  0.26.4  |
+|  Library  |    **drf-spectacular-sidecar**    | 2023.9.1 |
+|  Library  |             **boto3**             | 1.28.44  |
+|  Library  |        **django-storages**        |   1.14   |
+|  Library  |            **Pillow**             |  10.0.0  |
 
 <br> 
 
