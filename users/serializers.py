@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from users.models import Follow, User, Profile
+from common.utils import Image
 
 
 class SignUpSeiralizer(serializers.ModelSerializer):
@@ -30,7 +32,9 @@ class SignUpSeiralizer(serializers.ModelSerializer):
 class LoginSeiralizer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "fullname", "phone")
+        fields = ("id", "email", "fullname", "password")
+        extra_kwargs = {"password": {"write_only": True}}
+        read_only_fields = ("fullname",)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -59,7 +63,48 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ProfileUploadSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
+
+    class Meta:
+        model = Profile
+        fields = (
+            "user",
+            "nickname",
+            "birthday",
+            "image",
+            "is_public",
+            "is_active",
+        )
+
+    def create(self, validated_data):
+        image_file = validated_data.pop("image")
+        image = Image(image_file)
+        image.s3_upload()
+        image.set_public_in_s3()
+        validated_data["image_url"] = image.url
+        instance = super().create(validated_data)
+
+        return instance
+
+    def update(self, validated_data):
+        image_file = validated_data.pop("image")
+        image = Image(image_file)
+        image.s3_upload()
+        image.set_public_in_s3()
+        validated_data["image_url"] = image.url
+        instance = super().update(instance, validated_data)
+
+        return instance
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj: Profile):
+        user = obj.user
+        return UserSerializer(user).data
+
     class Meta:
         model = Profile
         fields = (
