@@ -175,11 +175,8 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"], url_path="following-posts")
     def following_posts(self, request: Request, *args, **kwargs):
         user: User = self.get_object()
-        print(user)
         following = user.following.all()
-        print(following)
         posts = Post.objects.filter(author__in=following)
-        print(posts)
 
         serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
