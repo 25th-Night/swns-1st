@@ -20,3 +20,6 @@ services:
       - ../.envs/local/db
       - ../.envs/local/django
       - ../.envs/local/server
+    environment:
+      - NCP_ACCESS_KEY: $NCP_ACCESS_KEY
+      - NCP_SECRET_KEY: $NCP_SECRET_KEY
