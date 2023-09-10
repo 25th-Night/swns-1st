@@ -49,6 +49,7 @@ INSTALLED_APPS += [
     "drf_spectacular",
     "django_filters",
     "drf_spectacular_sidecar",
+    "storages",
 ]
 
 ## Create Apps
@@ -134,6 +135,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Media files
+
+MEDIA_URL = "/media/"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -190,4 +195,22 @@ SPECTACULAR_SETTINGS = {
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "COMPONENT_SPLIT_REQUEST": True,
 }
+
+# NCP
+NCP_ACCESS_KEY = os.getenv("NCP_ACCESS_KEY", "")
+NCP_SECRET_KEY = os.getenv("NCP_SECRET_KEY", "")
+NCP_S3_ENDPOINT_URL = os.getenv("NCP_S3_ENDPOINT_URL", "")
+NCP_S3_BUCKET_NAME = os.getenv("NCP_S3_BUCKET_NAME", "")
+
+
+# S3
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+AWS_REGION = os.getenv("AWS_REGION", "")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "")
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com"
+AWS_DEFAULT_ACL = "public-read"
+DEFAULT_FILE_STORAGE = "config.storages.S3DefaultStorage"
+STATICFILES_STORAGE = "config.storages.S3StaticStorage"

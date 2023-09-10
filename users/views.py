@@ -24,6 +24,7 @@ from users.models import Follow, Profile, User
 from users.permissions import UserCustomReadOnly
 from users.serializers import (
     FollowSerializer,
+    ProfileUploadSerializer,
     ProfileSerializer,
     SignUpSeiralizer,
     LoginSeiralizer,
@@ -174,11 +175,8 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"], url_path="following-posts")
     def following_posts(self, request: Request, *args, **kwargs):
         user: User = self.get_object()
-        print(user)
         following = user.following.all()
-        print(following)
         posts = Post.objects.filter(author__in=following)
-        print(posts)
 
         serializer = PostSerializer(posts, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -190,6 +188,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filterset_class = ProfileFilter
+
+    def get_serializer_class(self):
+        if self.action not in ["list", "retrieve"]:
+            return ProfileUploadSerializer
+        return super().get_serializer_class()
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
