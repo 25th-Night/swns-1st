@@ -67,3 +67,15 @@ variable "ncr_image" {
 variable "ncp_lb_domain" {
   type = string
 }
+
+variable "aws_access_key_id" {
+  type = string
+}
+
+variable "aws_secret_access_key" {
+  type = string
+}
+
+variable "aws_storage_bucket_name" {
+  type = string
+}
