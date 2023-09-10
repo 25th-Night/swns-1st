@@ -28,10 +28,18 @@ class Image:
         )
 
     def s3_upload(self):
-        self.client.upload_fileobj(self.file, self.bucket_name, self.filename)
-        self.url = f"{self.endpoint_url}/{self.bucket_name}/{self.filename}"
+        try:
+            self.client.upload_fileobj(self.file, self.bucket_name, self.filename)
+            self.url = f"{self.endpoint_url}/{self.bucket_name}/{self.filename}"
+            print("Upload the Image Successfully")
+        except Exception as e:
+            print(f"Image upload failed: {e}")
 
     def set_public_in_s3(self):
-        response = self.client.put_object_acl(
-            Bucket=self.bucket_name, Key=self.filename, ACL="public-read"
-        )
+        try:
+            response = self.client.put_object_acl(
+                Bucket=self.bucket_name, Key=self.filename, ACL="public-read"
+            )
+            print("Set the Image to Public Successfully")
+        except Exception as e:
+            print(f"Image setting to public failed: {e}")
