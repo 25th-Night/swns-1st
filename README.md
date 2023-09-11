@@ -358,8 +358,6 @@
 
 
 
-
-
 <br>
 
 ## 📌 Notion
@@ -375,7 +373,175 @@
 - [09. (🐞 BUG) Model](https://notion.so/fe769e41e06e43ce9e90348c67c81187)
 - [10. (👑 FEATURE) Post](https://notion.so/d3ec4bc1f1654d0797794085918721ef)
 - [11. (👑 FEATURE) OpenAPI](https://notion.so/820a1c6a6da34d9d89495378a0531799)
-- [12. (👑 IMAGE) OpenAPI](https://notion.so/2d88d0e5590d46368c817d08c3967b20)
+- [12. (👑 FEATURE) IMAGE](https://notion.so/2d88d0e5590d46368c817d08c3967b20)
+
+
+<br>
+
+
+## 📠 Porting Manual
+
+**아래 내용이 이미 준비된 상황을 가정으로 작성되었습니다.**
+
+> - NCloud 및 AWS에 가입된 계정 존재
+> - NCloud에서 Administrator 권한이 부여된 Sub Account/서비스 계정이 존재
+> - AWS에서 Administrator 권한이 부여된 IAM 서비스 계정이 존재
+> - NCloud Container Registry에 생성한 Registry가 존재 
+
+
+### 1. 아래 문서를 참고하여 `NCLOUD Object Storage` 버킷과 `AWS S3` 버킷 생성
+
+- [NCloud Object Storage 버킷 생성](https://www.notion.so/browneyed/12-Image-2d88d0e5590d46368c817d08c3967b20?pvs=4#618e69a5cf6f4d0db92de94bb8a786a2)
+  - Terraform에서 NCloud Object Storage 리소스 생성을 지원하지 않아 수동으로 생성 (2023.09 기준)
+
+- [AWS AWS S3 버킷 생성](https://www.notion.so/browneyed/12-Image-2d88d0e5590d46368c817d08c3967b20?pvs=4#22e50e4b4f7f4c05983056ed0c3c25b1)
+  - 시간관계상 AWS S3 버킷 생성의 경우 IaC 대상에서 제외 → 2차에서작업 예정
+
+### 2. git clone 후 아래 순서대로 진행
+
+> `staging` 서버 환경 구축만을 기준으로 작성
+
+
+**a.`.envs` 폴더 하위에 `prod` 폴더 생성 후, 해당 폴더 하위에 `prod` 파일 생성**
+
+```bash
+# NCloud -------------------------------
+NCP_ACCESS_KEY=<NCloud Sub Account 계정의 Access Key>
+NCP_SECRET_KEY=<NCloud Sub Account 계정의 Secret Key>
+NCP_S3_ENDPOINT_URL=https://kr.object.ncloudstorage.com
+NCP_S3_REGION_NAME=kr-standard
+NCP_S3_BUCKET_NAME=<NCloud Object Storage에서 생성한 버킷 이름>
+# AWS ----------------------------------
+AWS_ACCESS_KEY_ID=<AWS IAM 계정의 Access Key>
+AWS_SECRET_ACCESS_KEY=<AWS IAM 계정의 Access Key>
+AWS_REGION=ap-northeast-2
+AWS_STORAGE_BUCKET_NAME=<1에서 생성한 AWS S3 버킷 이름>
+```
+
+**b. docker image 생성 및 NCloud Container Registry 로그인 후 push**
+
+- NCloud Container Registry 로그인
+```
+docker login <Sub Account Id>.kr.ncr.nturss.com
+```
+- Django 앱 이미지 생성
+```
+docker build -t <Sub Account Id>.kr.ncr.nturss.com/<이미지태그>:latest -f docker/Dockerfile_dj .
+```
+- 생성한 이미지를 NCloud Container Registry 로그인
+```
+docker push <Sub Account Id>.kr.ncr.nturss.com/<이미지태그>:latest
+```
+
+**c. https://djecrety.ir/ 접속 → `Generate` 클릭 > `Django Secret Key` 가 자동 복사됨**
+
+- 어딘가에 붙여넣기 하여 보관해둘 것
+
+**d. `infra/NCP/stage/staging` 폴더 내에 `terraform.tfvars` 파일 생성 및 작성**
+
+```bash
+# --------------------------------------------
+# Remote Server Account Info
+username="<원격서버 접속시 사용할 계정의 사용자명>"
+password="<원격서버 접속시 사용할 계정의 비밀번호>"
+# --------------------------------------------
+# DB Info
+postgres_db="<PostgreSQL db 서버 이름>"
+postgres_user="<PostgreSQL db 계정 사용자명>"
+postgres_password="<PostgreSQL db 계정 비밀번호>"
+postgres_volume="<PostgreSQL db에 사용할 Volume명>"
+db_container_name="<PostgreSQL db 컨테이너명>"
+# --------------------------------------------
+# Django Info
+django_settings_module="config.settings.staging"
+django_secret_key="'<a에서 생성한 Django Secret Key 삽입>'"
+django_container_name="<Django 앱 컨테이너명>"
+# --------------------------------------------
+# NCP Info
+ncr_host="browneyed.kr.ncr.ntruss.com"
+ncr_image="swns:latest"
+ncp_access_key="<NCloud Sub Account 계정의 Access Key>"
+ncp_secret_key="<NCloud Sub Account 계정의 Secret Key>"
+ncp_lb_domain="lb-init-domain.com"
+ncp_s3_endpoint_url="https://kr.object.ncloudstorage.com"
+ncp_s3_region_name="kr-standard"
+ncp_s3_bucket_name="<NCloud Object Storage에서 생성한 버킷 이름>"
+# --------------------------------------------
+# AWS Info
+aws_access_key_id="<AWS IAM 계정의 Access Key>"
+aws_secret_access_key="<AWS IAM 계정의 Access Key>"
+aws_region="ap-northeast-2"
+aws_storage_bucket_name="<1에서 생성한 AWS S3 버킷 이름>"
+```
+
+**e. Terraform 명령어를 실행하여 인프라 구축**
+
+```
+cd infra/NCP/stage/staging
+```
+```
+terraform init
+```
+```
+terraform apply
+```
+
+**f. `terraform apply` 의 결과로, 터미널 창에 아래와 같이 출력됨**
+
+```
+Outputs:
+
+be_lb_domain = "<Load Balancer 주소>"
+be_public_ip = "<Django 서버 Host 주소>"
+db_public_ip = "<PostgreSQL DB 서버 Host 주소>"
+``` 
+
+**g. ssh 를 이용하여 Django 서버에 원격 접속**
+
+> `<원격서버 접속시 사용할 계정 정보>` 는 위에서 `d`에서 지정한 데이터들을 사용
+
+```
+ssh <원격서버 접속시 사용할 계정의 사용자명>@<Django 서버 Host 주소>
+```
+```
+<원격서버 접속시 사용할 계정의 비밀번호> 입력 후 Enter
+```
+
+**h. `.env` 파일 내 `NCP_LB_DOMAIN` 내용 수정**
+
+> 실제 서비스에서는 도메인이 이미 지정되어 있으므로 불필요한 과정
+
+- `f` 에서 확인한 `Load Balancer 주소`로 지정
+```
+vi .env
+```
+```
+NCP_LB_DOMAIN=<Load Balancer 주소>
+```
+
+**i. 변경된 환경변수 적용**
+
+- `.env` 파일 리로드 및 해당 내용을 `.bash_aliases` 에도 적용하기 위해 아래 명령어 실행
+```
+source ~/.bash_aliases
+```
+
+**j. 실행 중인 Django 앱 컨테이너 중지 및 삭제 후 재실행**
+
+- 이미 `alias` 가 `.bash_aliases` 파일 내에 지정되어 있어음
+
+```
+# django 컨테이너 중지 및 컨테이너 삭제
+dstrm
+```
+```
+# 환경변수를 반영하여 django 컨테이너 실행
+drerun
+```
+
+**k. `f` 에서 확인한 `Load Balancer 주소`로 접속**
+
+- 정상 접속 됨을 확인 가능
 
 
 <br>
