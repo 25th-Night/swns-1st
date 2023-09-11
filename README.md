@@ -433,11 +433,11 @@ docker build -t <Sub Account Id>.kr.ncr.nturss.com/<이미지태그>:latest -f d
 docker push <Sub Account Id>.kr.ncr.nturss.com/<이미지태그>:latest
 ```
 
-**b. https://djecrety.ir/ 접속 → `Generate` 클릭 > `Django Secret Key` 가 자동 복사됨**
+**c. https://djecrety.ir/ 접속 → `Generate` 클릭 > `Django Secret Key` 가 자동 복사됨**
 
 - 어딘가에 붙여넣기 하여 보관해둘 것
 
-**c. `infra/NCP/stage/staging` 폴더 내에 `terraform.tfvars` 파일 생성 및 작성**
+**d. `infra/NCP/stage/staging` 폴더 내에 `terraform.tfvars` 파일 생성 및 작성**
 
 ```bash
 # --------------------------------------------
@@ -474,7 +474,7 @@ aws_region="ap-northeast-2"
 aws_storage_bucket_name="<1에서 생성한 AWS S3 버킷 이름>"
 ```
 
-**d. Terraform 명령어를 실행하여 인프라 구축**
+**e. Terraform 명령어를 실행하여 인프라 구축**
 
 ```
 cd infra/NCP/stage/staging
@@ -486,7 +486,7 @@ terraform init
 terraform apply
 ```
 
-**e. `terraform apply` 의 결과로, 터미널 창에 아래와 같이 출력됨**
+**f. `terraform apply` 의 결과로, 터미널 창에 아래와 같이 출력됨**
 
 ```
 Outputs:
@@ -496,9 +496,9 @@ be_public_ip = "<Django 서버 Host 주소>"
 db_public_ip = "<PostgreSQL DB 서버 Host 주소>"
 ``` 
 
-**f. ssh 를 이용하여 Django 서버에 원격 접속**
+**g. ssh 를 이용하여 Django 서버에 원격 접속**
 
-> `<원격서버 접속시 사용할 계정 정보>` 는 위에서 `c`에서 지정한 데이터들을 사용
+> `<원격서버 접속시 사용할 계정 정보>` 는 위에서 `d`에서 지정한 데이터들을 사용
 
 ```
 ssh <원격서버 접속시 사용할 계정의 사용자명>@<Django 서버 Host 주소>
@@ -507,11 +507,11 @@ ssh <원격서버 접속시 사용할 계정의 사용자명>@<Django 서버 Hos
 <원격서버 접속시 사용할 계정의 비밀번호> 입력 후 Enter
 ```
 
-**g. `.env` 파일 내 `NCP_LB_DOMAIN` 내용 수정**
+**h. `.env` 파일 내 `NCP_LB_DOMAIN` 내용 수정**
 
 > 실제 서비스에서는 도메인이 이미 지정되어 있으므로 불필요한 과정
 
-- `e` 에서 확인한 `Load Balancer 주소`로 지정
+- `f` 에서 확인한 `Load Balancer 주소`로 지정
 ```
 vi .env
 ```
@@ -519,14 +519,14 @@ vi .env
 NCP_LB_DOMAIN=<Load Balancer 주소>
 ```
 
-**h. 변경된 환경변수 적용**
+**i. 변경된 환경변수 적용**
 
 - `.env` 파일 리로드 및 해당 내용을 `.bash_aliases` 에도 적용하기 위해 아래 명령어 실행
 ```
 source ~/.bash_aliases
 ```
 
-**i. 실행 중인 Django 앱 컨테이너 중지 및 삭제 후 재실행**
+**j. 실행 중인 Django 앱 컨테이너 중지 및 삭제 후 재실행**
 
 - 이미 `alias` 가 `.bash_aliases` 파일 내에 지정되어 있어음
 
@@ -539,7 +539,7 @@ dstrm
 drerun
 ```
 
-**j. `e` 에서 확인한 `Load Balancer 주소`로 접속**
+**k. `f` 에서 확인한 `Load Balancer 주소`로 접속**
 
 - 정상 접속 됨을 확인 가능
 
