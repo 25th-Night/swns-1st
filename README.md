@@ -236,7 +236,7 @@
 ## API 명세서
 > 하단 Notion 링크를 통해 접속하여 확인 가능
 
-![image](![API_docs](https://github.com/likelion-backend-6th/TrackProject_1_ChoiSeonWoo/assets/104040502/b802e562-7915-4b6b-862e-67b6051c16ed)
+![API_docs](https://github.com/likelion-backend-6th/TrackProject_1_ChoiSeonWoo/assets/104040502/b802e562-7915-4b6b-862e-67b6051c16ed)
 
 
 
