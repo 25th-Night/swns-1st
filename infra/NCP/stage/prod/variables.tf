@@ -68,6 +68,10 @@ variable "ncp_lb_domain" {
   type = string
 }
 
+variable "ncp_s3_bucket_name" {
+  type = string
+}
+
 variable "aws_access_key_id" {
   type = string
 }

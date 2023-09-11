@@ -30,6 +30,8 @@ locals {
   be_port_range             = "8000"
   be_init_script_path       = "be_init_script.tftpl"
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
+  ncp_s3_endpoint_url       = "https://kr.object.ncloudstorage.com"
+  ncp_s3_region_name        = "kr-standard"
   aws_region                = "ap-northeast-2"
 }
 
@@ -124,6 +126,9 @@ module "be" {
     postgres_password       = var.postgres_password
     postgres_port           = local.db_port_range
     db_host                 = ncloud_public_ip.db_public_ip.public_ip
+    ncp_s3_endpoint_url     = local.ncp_s3_endpoint_url
+    ncp_s3_region_name      = local.ncp_s3_region_name
+    ncp_s3_bucket_name      = var.ncp_s3_bucket_name
     aws_access_key_id       = var.aws_access_key_id
     aws_secret_access_key   = var.aws_secret_access_key
     aws_region              = local.aws_region
