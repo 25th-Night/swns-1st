@@ -229,14 +229,14 @@
 
 ## 📅 ERD
 
-![image](https://s3.ap-northeast-2.amazonaws.com/25th.night-project/TI/TrackProject_1_ChoiSeonWoo/ERD.png))
+![image](https://s3.ap-northeast-2.amazonaws.com/25th.night-project/TI/TrackProject_1_ChoiSeonWoo/ERD.png)
 
 <br>
 
 ## API 명세서
 > 하단 Notion 링크를 통해 접속하여 확인 가능
 
-![API_docs](https://s3.ap-northeast-2.amazonaws.com/25th.night-project/TI/TrackProject_1_ChoiSeonWoo/API_docs.png))
+![API_docs](https://s3.ap-northeast-2.amazonaws.com/25th.night-project/TI/TrackProject_1_ChoiSeonWoo/API_docs.png)
 
 
 
