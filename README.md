@@ -245,13 +245,13 @@
 
 ## 배포 URL
 
-### [🚧 `staging` Server URL](http://be-lb-staging-19480782-5e27276c4a42.kr.lb.naverncp.com/)
+### ~~[🚧 `staging` Server URL]()~~ 230916 서버 종료
 
-> [📜 `OpenAPI` URL](http://be-lb-staging-19480782-5e27276c4a42.kr.lb.naverncp.com/api/docs/)
+> ~~[📜 `OpenAPI` URL]()~~ 230916 서버 종료
 
-### [🏳‍🌈 `production` Server URL](http://be-lb-prod-19480757-e92e545ff666.kr.lb.naverncp.com)
+### ~~[🏳‍🌈 `production` Server URL]()~~230916 서버 종료
 
-> [📜 `OpenAPI` URL](http://be-lb-prod-19480757-e92e545ff666.kr.lb.naverncp.com/api/docs/)
+> ~~[📜 `OpenAPI` URL]()~~ 230916 서버 종료
 
 
 
